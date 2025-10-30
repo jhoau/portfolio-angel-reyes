@@ -2,61 +2,87 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Configurar transporter
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: { 
-      user: process.env.EMAIL_USER, 
-      pass: process.env.EMAIL_PASS
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
-  });
+});
 
-  transporter.verify((error, success) => {
+// Verificar conexión
+transporter.verify((error, success) => {
     if (error) {
-        console.log('Error configuring email transporter:', error);
+        console.log('❌ Error:', error);
     } else {
-        console.log('Email transporter is ready to send messages');
-    } 
+        console.log('✅ Email transporter is ready to send messages');
+    }
 });
 
-app.post('/api/contact', async (req, res) => {
-
-  const {nombre, email, mensaje} = req.body;
-
-  console.log('📨 received data:',{nombre,email,mensaje});
-});
-
+// Endpoint de contacto
 app.post('/api/contact', async (req, res) => {
     const { nombre, email, mensaje } = req.body;
     
-    // Validar que todos los campos existan
+    // Validación
     if (!nombre || !email || !mensaje) {
         return res.status(400).json({
             success: false,
-            message: 'All the fields are required'
+            message: 'All fields are required'
         });
     }
     
-    // Validar formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({
+    // Opciones del email
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER,
+        subject: `New message from ${nombre}`,
+        text: `Name: ${nombre}\nEmail: ${email}\nMessage: ${mensaje}`,
+        html: `
+            <h2>New contact message</h2>
+            <p><strong>Name:</strong> ${nombre}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${mensaje}</p>
+        `
+    };
+    
+    // Enviar email
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`✉️ Email received from: ${nombre} (${email})`);
+        
+        res.status(200).json({
+            success: true,
+            message: 'Message sent successfully'
+        });
+    } catch (error) {
+        console.error('❌ Error:', error);
+        
+        res.status(500).json({
             success: false,
-            message: 'Invalid email'
+            message: 'Error sending message'
         });
     }
-    
-    console.log('✅ Validation passed:');
+});
+
+// ⭐ IMPORTANTE: Esta parte mantiene el servidor corriendo
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📧 Email configured: ${process.env.EMAIL_USER}`);
 });

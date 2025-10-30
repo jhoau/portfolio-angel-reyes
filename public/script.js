@@ -20,7 +20,11 @@ const translations = {
         messageLabel: "Message",
         sendButton: "Send Message",
         footer: "© 2025 Angel Reyes. All rights reserved.",
-        formSuccess: "Thank you for your message! (Note: Connect this to your backend or email service)"
+        formSending: "Sending...",
+        formError: "Something went wrong. Please try again.",
+        formInvalidFields: "Please complete all fields correctly.",
+        formInvalidEmail: "Please enter a valid email.",
+       formSuccess: "Thank you! Your message has been sent."
     },
     es: {
         name: "Angel Reyes",
@@ -42,7 +46,11 @@ const translations = {
         messageLabel: "Mensaje",
         sendButton: "Enviar Mensaje",
         footer: "© 2025 Angel Reyes. Todos los derechos reservados.",
-        formSuccess: "¡Gracias por tu mensaje! (Nota: Conecta esto con tu backend o servicio de email)"
+        formSending: "Enviando...",
+        formError: "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        formInvalidFields: "Completa todos los campos correctamente.",
+        formInvalidEmail: "Introduce un correo válido.",
+        formSuccess: "¡Gracias! Tu mensaje ha sido enviado."
     }
 };
 
@@ -84,12 +92,65 @@ function initLanguageToggle() {
 // Form submission handler
 function initContactForm() {
     const form = document.querySelector('form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert(translations[currentLang].formSuccess);
-            // Add your form submission logic here
-            // Example: send data to backend, use EmailJS, etc.
+            
+            // 1. Obtener datos del formulario
+            const formData = {
+                nombre: form.querySelector('#nombre').value.trim(),
+                email: form.querySelector('#email').value.trim(),
+                mensaje: form.querySelector('#mensaje').value.trim()
+            };
+            
+            // 2. Validación básica en el frontend
+            if (!formData.nombre || !formData.email || !formData.mensaje) {
+                alert(translations[currentLang].formInvalidFields);
+                return;
+            }
+            
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                alert(translations[currentLang].formInvalidEmail);
+                return;
+            }
+            
+            // 3. Deshabilitar botón y cambiar texto
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = translations[currentLang].formSending;
+            
+            try {
+                // 4. Enviar al backend
+                const response = await fetch('http://localhost:3000/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                // 5. Manejar respuesta
+                if (response.ok && data.success) {
+                    alert(translations[currentLang].formSuccess);
+                    form.reset(); // Limpiar formulario
+                } else {
+                    alert(data.message || translations[currentLang].formError);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert(translations[currentLang].formError);
+            } finally {
+                // 6. Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
         });
     }
 }
