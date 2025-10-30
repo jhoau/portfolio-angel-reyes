@@ -7,7 +7,7 @@ Contenido:
 # Dependencies
 node_modules/
 
-# Environment variables (NUNCA SUBIR)
+# Environment variables 
 .env
 
 # Logs
