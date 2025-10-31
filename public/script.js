@@ -1,6 +1,58 @@
+function initTypingAnimation(){
+    const typingText = document.querySelector('.typing-text');
+
+    const texts = {
+        en: ['Software Developer', 'Web Developer', 'Problem Solver', 'Tech Enthusiast'],
+        es: ['Desarrollador de Software', 'Desarrollador Web', 'Solucionador de Problemas', 'Entusiasta de la Tecnología']
+    };
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let currentLangtyping = 'en';
+
+    function type() {
+        const currentTexts = texts[currentLangtyping];
+        const currentText = currentTexts[textIndex];
+
+        if (isDeleting) {
+            //Borrando
+            typingText.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            //escribiendo
+            typingText.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        let typeSpeed = isDeleting ? 500: 100;
+
+        if (!isDeleting && charIndex === currentText.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+    }
+
+    if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        textIndex = (textIndex + 1) % currentTexts.length;
+        typeSpeed = 500;
+    }
+    setTimeout(type, typeSpeed);
+    }
+    window.updateTypingLang = function(lang) {
+        currentLangtyping = lang;
+        textIndex = 0;
+        charIndex = 0;
+        isDeleting = false;
+    }
+}
 // Translations object
 const translations = {
     en: {
+        greeting: "Hi, I'm",
+        name: "Angel Reyes",
+        titleStatic: "I'm a ",
+        title: "Software Developer",
         name: "Angel Reyes",
         title: " Software Developer",
         aboutTitle: "About Me",
@@ -27,6 +79,10 @@ const translations = {
        formSuccess: "Thank you! Your message has been sent."
     },
     es: {
+        greeting: "Hola, soy",
+        name: "Angel Reyes",
+        titleStatic: "Soy ",
+        title: "Desarrollador de Software",
         name: "Angel Reyes",
         title: "Desarrollador de Software",
         aboutTitle: "Sobre Mí",
@@ -77,6 +133,10 @@ function changeLanguage(lang) {
             btn.classList.add('active');
         }
     });
+
+    if (window.updateTypingLang) {
+        window.updateTypingLang(lang);
+    }
 }
 
 // Initialize language buttons
@@ -176,4 +236,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initLanguageToggle();
     initContactForm();
     initSmoothScroll();
+    initTypingAnimation();
 });
