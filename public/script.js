@@ -25,7 +25,7 @@ function initTypingAnimation(){
             charIndex++;
         }
 
-        let typeSpeed = isDeleting ? 500: 100;
+        let typeSpeed = isDeleting ? 30: 100;
 
         if (!isDeleting && charIndex === currentText.length) {
             typeSpeed = 2000;
@@ -35,10 +35,13 @@ function initTypingAnimation(){
     if (isDeleting && charIndex === 0) {
         isDeleting = false;
         textIndex = (textIndex + 1) % currentTexts.length;
-        typeSpeed = 500;
+        typeSpeed = 3000;
     }
     setTimeout(type, typeSpeed);
     }
+
+    type();
+
     window.updateTypingLang = function(lang) {
         currentLangtyping = lang;
         textIndex = 0;
