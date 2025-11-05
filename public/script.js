@@ -49,6 +49,29 @@ function initTypingAnimation(){
         isDeleting = false;
     }
 }
+
+function initStickyNavbar() {
+    const navbar = document.querySelector('.navbar-sticky');
+    const heroSection = document.querySelector('header');
+    
+    if (!navbar || !heroSection) return;
+    
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        const heroHeight = heroSection.offsetHeight;
+        
+        if (currentScroll > heroHeight - 500) {
+            navbar.classList.add('visible');
+        } else {
+            navbar.classList.remove('visible');
+        }
+        
+        lastScroll = currentScroll;
+    });
+}
+
 // Translations object
 const translations = {
     en: {
@@ -116,12 +139,10 @@ const translations = {
 // Current language
 let currentLang = 'en';
 
-// Change language function
 function changeLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
     
-    // Update all elements with data-i18n attribute
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (translations[lang][key]) {
@@ -161,33 +182,28 @@ function initContactForm() {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // 1. Obtener datos del formulario
             const formData = {
                 nombre: form.querySelector('#nombre').value.trim(),
                 email: form.querySelector('#email').value.trim(),
                 mensaje: form.querySelector('#mensaje').value.trim()
             };
             
-            // 2. Validación básica en el frontend
             if (!formData.nombre || !formData.email || !formData.mensaje) {
                 alert(translations[currentLang].formInvalidFields);
                 return;
             }
             
-            // Validar formato de email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formData.email)) {
                 alert(translations[currentLang].formInvalidEmail);
                 return;
             }
             
-            // 3. Deshabilitar botón y cambiar texto
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].formSending;
             
             try {
-                // 4. Enviar al backend
                 const response = await fetch('http://localhost:3000/api/contact', {
                     method: 'POST',
                     headers: {
@@ -198,10 +214,9 @@ function initContactForm() {
                 
                 const data = await response.json();
                 
-                // 5. Manejar respuesta
                 if (response.ok && data.success) {
                     alert(translations[currentLang].formSuccess);
-                    form.reset(); // Limpiar formulario
+                    form.reset(); 
                 } else {
                     alert(data.message || translations[currentLang].formError);
                 }
@@ -210,7 +225,7 @@ function initContactForm() {
                 console.error('Error:', error);
                 alert(translations[currentLang].formError);
             } finally {
-                // 6. Rehabilitar botón
+              
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
@@ -218,7 +233,6 @@ function initContactForm() {
     }
 }
 
-// Smooth scroll for anchor links
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -240,4 +254,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactForm();
     initSmoothScroll();
     initTypingAnimation();
+    initStickyNavbar();
 });
