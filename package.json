@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "echo \"no build\"",
-  "start": "node app.js"
+  "start": "node server.js"
   },
   "keywords": [],
   "author": "",
