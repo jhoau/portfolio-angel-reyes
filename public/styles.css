@@ -64,7 +64,7 @@ header {
     overflow: hidden;
 }
 
-/* Efecto de partículas sutiles (opcional) */
+
 header::before {
     content: '';
     position: absolute;
@@ -475,7 +475,7 @@ footer {
 /* Navbar Sticky */
 .navbar-sticky {
     position: fixed;
-    top: -100px; /* Oculto por defecto */
+    top: -100px; 
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.98);
@@ -486,7 +486,7 @@ footer {
 }
 
 .navbar-sticky.visible {
-    top: 0; /* Se muestra al hacer scroll */
+    top: 0; 
 }
 
 .navbar-content {
@@ -578,7 +578,7 @@ footer {
 
 @media (max-width: 580px) {
     .navbar-name {
-        display: none; /* Oculta el nombre en móviles pequeños */
+        display: none; 
     }
     
     .navbar-right {
