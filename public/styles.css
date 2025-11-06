@@ -475,7 +475,7 @@ footer {
 /* Navbar Sticky */
 .navbar-sticky {
     position: fixed;
-    top: -100px; 
+    top: -100px;
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.98);
@@ -486,7 +486,7 @@ footer {
 }
 
 .navbar-sticky.visible {
-    top: 0; 
+    top: 0;
 }
 
 .navbar-content {
@@ -516,6 +516,32 @@ footer {
     font-size: 1.2rem;
     font-weight: 600;
     color: #1a1a1a;
+}
+
+/* Toggle dentro del navbar (solo móvil) */
+.navbar-toggle-mobile {
+    display: none;
+    background: #f5f5f5;
+    border-radius: 20px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.navbar-toggle-mobile .lang-btn {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.navbar-toggle-mobile .lang-btn.active {
+    background: #1a1a1a;
+    color: white;
 }
 
 .navbar-right {
@@ -552,72 +578,91 @@ footer {
     width: 100%;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive para tablets */
+@media (max-width: 968px) {
     .navbar-content {
         padding: 12px 20px;
     }
     
     .navbar-right {
-        gap: 15px;
+        gap: 20px;
     }
     
     .navbar-right a {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .navbar-content {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    /* Fila superior: foto + toggle */
+    .navbar-left {
+        order: 1;
+        gap: 10px;
+    }
+    
+    .navbar-toggle-mobile {
+        order: 2;
+        display: flex; /* ← Mostrar toggle */
+        margin-left: auto;
+    }
+    
+    /* Fila inferior: links */
+    .navbar-right {
+        order: 3;
+        width: 100%;
+        justify-content: space-around;
+        gap: 5px;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    .navbar-right a {
+        font-size: 0.8rem;
+        padding: 5px 8px;
     }
     
     .navbar-avatar {
-        width: 35px;
-        height: 35px;
+        width: 40px;
+        height: 40px;
     }
     
     .navbar-name {
         font-size: 1rem;
     }
-}
-
-@media (max-width: 580px) {
-    .navbar-name {
-        display: none; 
-    }
     
-    .navbar-right {
-        gap: 10px;
-    }
-    
-    .navbar-right a {
-        font-size: 0.8rem;
-    }
-}
-
-/* Toggle dentro del navbar (solo móvil) */
-.navbar-toggle-mobile {
-    display: none;
-    background: #f5f5f5;
-    border-radius: 20px;
-    padding: 4px;
-    gap: 4px;
-}
-
-.navbar-toggle-mobile .lang-btn {
-    padding: 6px 16px;
-    font-size: 0.85rem;
-}
-
-@media (max-width: 768px) {
-    /* Mostrar toggle en navbar */
-    .navbar-toggle-mobile {
-        display: flex;
-    }
-    
-    /* Ocultar toggle flotante original */
-    .language-toggle {
+    /* Ocultar toggle flotante en móvil cuando navbar visible */
+    body:has(.navbar-sticky.visible) .language-toggle {
         display: none;
     }
 }
 
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+    .navbar-name {
+        display: none;
+    }
+    
+    .navbar-right a {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+    }
+    
+    .navbar-toggle-mobile .lang-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Desktop: toggle flotante visible, navbar toggle oculto */
 @media (min-width: 769px) {
-    /* En desktop, toggle flotante visible, navbar toggle oculto */
     .navbar-toggle-mobile {
         display: none !important;
     }
