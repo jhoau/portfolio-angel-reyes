@@ -219,20 +219,17 @@ function initContactForm() {
         const email = form.querySelector('#email').value.trim();
         const mensaje = form.querySelector('#mensaje').value.trim();
 
-        // Validación básica
         if (!nombre || !email || !mensaje) {
             alert(translations[currentLang].formInvalidFields || 'Please fill in all fields.');
             return;
         }
 
-        // Validar email simple
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert(translations[currentLang].formInvalidEmail || 'Please enter a valid email.');
             return;
         }
 
-        // Estado "enviando"
         const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
         submitBtn.textContent = translations[currentLang].formSending || 'Sending...';
@@ -240,9 +237,8 @@ function initContactForm() {
             statusEl.textContent = '';
         }
 
-        // Armar payload para Web3Forms
         const payload = {
-            access_key: '6e788d9f-fd2b-41ad-996e-79b95129c762', // tu Access Key
+            access_key: '6e788d9f-fd2b-41ad-996e-79b95129c762',
             from_name: 'Portfolio Contact Form',
             subject: `New message from ${nombre}`,
             name: nombre,
@@ -263,17 +259,18 @@ function initContactForm() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                // Éxito
+                // Success
                 if (statusEl) {
                     statusEl.textContent = translations[currentLang].formSuccess || 'Thank you! Your message has been sent.';
-                    statusEl.style.color = '#4ade80'; // verde suave
+                    statusEl.style.color = '#4ade80'; 
                 }
                 form.reset();
+                //Error
             } else {
                 console.error('Web3Forms error:', data);
                 if (statusEl) {
                     statusEl.textContent = translations[currentLang].formError || 'Error sending message. Please try again.';
-                    statusEl.style.color = '#f87171'; // rojo
+                    statusEl.style.color = '#f87171'; 
                 }
             }
         } catch (error) {
