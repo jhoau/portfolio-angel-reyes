@@ -590,3 +590,35 @@ footer {
     }
 }
 
+/* Toggle dentro del navbar (solo móvil) */
+.navbar-toggle-mobile {
+    display: none;
+    background: #f5f5f5;
+    border-radius: 20px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.navbar-toggle-mobile .lang-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    /* Mostrar toggle en navbar */
+    .navbar-toggle-mobile {
+        display: flex;
+    }
+    
+    /* Ocultar toggle flotante original */
+    .language-toggle {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    /* En desktop, toggle flotante visible, navbar toggle oculto */
+    .navbar-toggle-mobile {
+        display: none !important;
+    }
+}
