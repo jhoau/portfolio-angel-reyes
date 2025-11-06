@@ -8,27 +8,66 @@
 </head>
 <body>
 
-     <!-- Navbar Sticky Element -->
-    <nav class="navbar-sticky">
-        <div class="navbar-content">
-            <div class="navbar-left">
-              <img src="https://media.licdn.com/dms/image/v2/D4E03AQFyTazmSkgkUg/profile-displayphoto-crop_800_800/B4EZnzZjKRKYAI-/0/1760725186593?e=1763596800&v=beta&t=zkFSuJHTGwQ9ugGepWuk3TPI8hSVh3GArYsmNJ-qXXM" alt="profile-picture"class="navbar-avatar">
-                <span class="navbar-name">Angel Reyes</span>
-            </div>
-
-               <div class="language-toggle">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
+   <!-- Navbar Sticky -->
+<nav class="navbar-sticky">
+    <div class="navbar-content">
+        <div class="navbar-left">
+             <img src="https://media.licdn.com/dms/image/v2/D4E03AQFyTazmSkgkUg/profile-displayphoto-crop_800_800/B4EZnzZjKRKYAI-/0/1760725186593?e=1763596800&v=beta&t=zkFSuJHTGwQ9ugGepWuk3TPI8hSVh3GArYsmNJ-qXXM" alt="Angel Reyes" class="navbar-avatar">
+            <span class="navbar-name">Angel Reyes</span>
+        </div>
+        
+        <!-- Hamburger Menu (solo móvil) -->
+        <button class="hamburger-btn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Desktop Menu -->
+        <div class="navbar-right">
+            <a href="#about" data-i18n="aboutTitle">About Me</a>
+            <a href="#skills" data-i18n="skillsTitle">Skills</a>
+            <a href="#projects" data-i18n="projectsTitle">Projects</a>
+            <a href="#contact" data-i18n="contactTitle">Contact</a>
+        </div>
     </div>
+</nav>
 
-            <div class="navbar-right">
+<!-- Mobile Sidebar Menu -->
+<div class="mobile-menu-overlay">
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Menu">✕</button>
+        
+        <div class="mobile-menu-content">
+            <!-- Language Toggle -->
+            <div class="mobile-menu-lang">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="es">ES</button>
+            </div>
+            
+            <!-- Navigation Links -->
+            <nav class="mobile-menu-nav">
                 <a href="#about" data-i18n="aboutTitle">About Me</a>
                 <a href="#skills" data-i18n="skillsTitle">Skills</a>
                 <a href="#projects" data-i18n="projectsTitle">Projects</a>
                 <a href="#contact" data-i18n="contactTitle">Contact</a>
+            </nav>
+            
+            <!-- Social Links -->
+            <div class="mobile-menu-social">
+                <a href="https://github.com/yourusername" target="_blank">
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/yourusername" target="_blank">
+                    <span>LinkedIn</span>
+                </a>
+                <a href="mailto:youremail@example.com">
+                    <span>Email</span>
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
+</div>
     
  
 
