@@ -10,21 +10,20 @@ function initMobileMenu() {
     // Abrir menú
     hamburger.addEventListener('click', () => {
         overlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Bloquear scroll
+        document.body.style.overflow = 'hidden'; 
     });
     
     // Cerrar menú
     const closeMenu = () => {
         overlay.classList.remove('active');
-        document.body.style.overflow = ''; // Restaurar scroll
+        document.body.style.overflow = ''; 
     };
     
     closeBtn?.addEventListener('click', closeMenu);
     overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeMenu(); // Cerrar al click fuera
+        if (e.target === overlay) closeMenu(); 
     });
     
-    // Cerrar al hacer click en un link
     menuLinks.forEach(link => {
         link.addEventListener('click', closeMenu);
     });
@@ -207,64 +206,88 @@ function initLanguageToggle() {
 
 // Form submission handler
 function initContactForm() {
-    const form = document.querySelector('form');
-    const submitBtn = form.querySelector('button[type="submit"]');
-    
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                nombre: form.querySelector('#nombre').value.trim(),
-                email: form.querySelector('#email').value.trim(),
-                mensaje: form.querySelector('#mensaje').value.trim()
-            };
-            
-            if (!formData.nombre || !formData.email || !formData.mensaje) {
-                alert(translations[currentLang].formInvalidFields);
-                return;
-            }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.email)) {
-                alert(translations[currentLang].formInvalidEmail);
-                return;
-            }
-            
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.textContent = translations[currentLang].formSending;
-            
-            try {
-                const response = await fetch('http://localhost:3000/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    alert(translations[currentLang].formSuccess);
-                    form.reset(); 
-                } else {
-                    alert(data.message || translations[currentLang].formError);
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert(translations[currentLang].formError);
-            } finally {
-              
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        });
-    }
-}
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
 
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const statusEl = document.getElementById('contact-status');
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const nombre = form.querySelector('#nombre').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const mensaje = form.querySelector('#mensaje').value.trim();
+
+        // Validación básica
+        if (!nombre || !email || !mensaje) {
+            alert(translations[currentLang].formInvalidFields || 'Please fill in all fields.');
+            return;
+        }
+
+        // Validar email simple
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert(translations[currentLang].formInvalidEmail || 'Please enter a valid email.');
+            return;
+        }
+
+        // Estado "enviando"
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = translations[currentLang].formSending || 'Sending...';
+        if (statusEl) {
+            statusEl.textContent = '';
+        }
+
+        // Armar payload para Web3Forms
+        const payload = {
+            access_key: '6e788d9f-fd2b-41ad-996e-79b95129c762', // tu Access Key
+            from_name: 'Portfolio Contact Form',
+            subject: `New message from ${nombre}`,
+            name: nombre,
+            email: email,
+            message: mensaje
+        };
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Éxito
+                if (statusEl) {
+                    statusEl.textContent = translations[currentLang].formSuccess || 'Thank you! Your message has been sent.';
+                    statusEl.style.color = '#4ade80'; // verde suave
+                }
+                form.reset();
+            } else {
+                console.error('Web3Forms error:', data);
+                if (statusEl) {
+                    statusEl.textContent = translations[currentLang].formError || 'Error sending message. Please try again.';
+                    statusEl.style.color = '#f87171'; // rojo
+                }
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            if (statusEl) {
+                statusEl.textContent = translations[currentLang].formError || 'Server error. Please try again.';
+                statusEl.style.color = '#f87171';
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+}
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
