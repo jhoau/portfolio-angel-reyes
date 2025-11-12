@@ -1,4 +1,30 @@
+// Theme Toggle (Dark/Light Mode)
+function initThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    
+    html.setAttribute('data-theme', initialTheme);
+    
+    themeToggle?.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        themeToggle.style.transform = 'rotate(360deg)';
+        setTimeout(() => {
+            themeToggle.style.transform = 'rotate(0deg)';
+        }, 300);
+    });
+}
 // Mobile Menu Toggle
+
+
 function initMobileMenu() {
     const hamburger = document.querySelector('.hamburger-btn');
     const overlay = document.querySelector('.mobile-menu-overlay');
@@ -302,6 +328,7 @@ function initSmoothScroll() {
 
 // Initialize all functions when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+     initThemeToggle();
     initLanguageToggle();
     initContactForm();
     initSmoothScroll();
