@@ -756,7 +756,8 @@ footer {
     right: -300px;
     width: 280px;
     height: 100%;
-    background: var(--text-primary);
+    background: var(--bg-card);
+    color: var(--text-primary);
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     transition: right 0.3s ease;
@@ -775,7 +776,7 @@ footer {
     background: none;
     border: none;
     font-size: 2rem;
-    color: #333;
+    color: var(--text-primary);;
     cursor: pointer;
     padding: 5px;
     line-height: 1;
@@ -792,6 +793,65 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 30px;
+}
+
+/* Theme Toggle in Mobile Menu */
+.mobile-menu-theme {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.theme-toggle-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.theme-toggle-mobile:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.theme-toggle-mobile svg {
+    flex-shrink: 0;
+}
+
+.theme-toggle-mobile .sun-icon {
+    display: none;
+    color: #ffa500;
+}
+
+.theme-toggle-mobile .moon-icon {
+    display: block;
+    color: #667eea;
+}
+
+[data-theme="dark"] .theme-toggle-mobile .sun-icon {
+    display: block;
+    color: #ffa500;
+}
+
+[data-theme="dark"] .theme-toggle-mobile .moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle-mobile:hover {
+    background: var(--accent-primary);
+}
+
+.theme-label {
+    font-size: 1rem;
 }
 
 /* Language Toggle in Menu */
@@ -876,17 +936,16 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-    /* Mostrar hamburger */
     .hamburger-btn {
         display: flex;
     }
     
-    /* Ocultar menu desktop */
+   
     .navbar-right {
         display: none !important;
     }
     
-    /* Ocultar toggle flotante cuando navbar visible */
+    
     .navbar-sticky.visible ~ .language-toggle {
         display: none;
     }
@@ -897,7 +956,7 @@ footer {
 }
 
 @media (min-width: 769px) {
-    /* Ocultar menú móvil en desktop */
+
     .hamburger-btn,
     .mobile-menu-overlay {
         display: none !important;
@@ -961,5 +1020,59 @@ footer {
     .theme-toggle svg {
         width: 18px;
         height: 18px;
+    }
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;                 
+}
+
+.navbar-sticky .language-toggle,
+.navbar-sticky .theme-toggle {
+    position: static !important;      
+    top: auto !important;
+    right: auto !important;
+    z-index: auto !important;
+    box-shadow: none;                  
+}
+
+.navbar-sticky .language-toggle {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 4px;                      
+    display: flex;
+    gap: 6px;
+}
+
+.navbar-sticky .theme-toggle {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    transition: transform .2s ease;
+}
+
+.navbar-sticky .theme-toggle:hover {
+    transform: scale(1.05);
+}
+
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;                 
+}
+
+@media (max-width: 768px) {
+    .navbar-sticky .language-toggle,
+    .navbar-sticky .theme-toggle {
+        display: none !important;
     }
 }

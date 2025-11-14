@@ -1,6 +1,6 @@
-// Theme Toggle (Dark/Light Mode)
 function initThemeToggle() {
     const themeToggle = document.querySelector('.theme-toggle');
+    const themeToggleMobile = document.querySelector('.theme-toggle-mobile');
     const html = document.documentElement;
     
     const savedTheme = localStorage.getItem('theme');
@@ -9,18 +9,27 @@ function initThemeToggle() {
     
     html.setAttribute('data-theme', initialTheme);
     
-    themeToggle?.addEventListener('click', () => {
+    // Función para cambiar tema
+    const toggleTheme = (button) => {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
         html.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         
-        themeToggle.style.transform = 'rotate(360deg)';
-        setTimeout(() => {
-            themeToggle.style.transform = 'rotate(0deg)';
-        }, 300);
-    });
+        if (button) {
+            button.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                button.style.transform = 'rotate(0deg)';
+            }, 300);
+        }
+    };
+    
+    // Desktop toggle
+    themeToggle?.addEventListener('click', () => toggleTheme(themeToggle));
+    
+    // Mobile toggle
+    themeToggleMobile?.addEventListener('click', () => toggleTheme(themeToggleMobile));
 }
 // Mobile Menu Toggle
 
