@@ -9,7 +9,6 @@ function initThemeToggle() {
     
     html.setAttribute('data-theme', initialTheme);
     
-    // Función para cambiar tema
     const toggleTheme = (button) => {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
