@@ -12,15 +12,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static files
+// 1) Static files first
 app.use(express.static(path.join(__dirname, "public")));
 
-// Home
+// 2) Home
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Catch-all SOLO para rutas sin extension (evita romper /images, /css, /js)
+// 3) Catch-all ONLY for routes without extension, excluding /api
 app.get(/^\/(?!api)(?!.*\.[a-zA-Z0-9]+$).*/, (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -28,4 +28,3 @@ app.get(/^\/(?!api)(?!.*\.[a-zA-Z0-9]+$).*/, (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-// End of server.js
